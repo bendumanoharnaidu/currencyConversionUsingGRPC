@@ -51,15 +51,10 @@ func (s *Server) ConvertCurrency(ctx context.Context, req *ConvertRequest) (*Con
 	}
 
 	// Perform currency conversion
-	baseRate := currencies.Rates[req.BaseCurrency]          // INR 80	//USD 1
-	targetRate := currencies.Rates[req.TargetCurrency]      // USD 1	//INR 80
-	convertedAmount := (req.Amount / baseRate) * targetRate //10*1/80   //1*80/1
-	serviceFee := 0.000
-	if baseRate == 1 {
-		serviceFee = serviceFeeInINR
-	} else {
-		serviceFee = ((serviceFeeInINR / baseRate) * targetRate)
-	}
+	baseRate := currencies.Rates[req.BaseCurrency]          //From INR 80	//USD 1
+	targetRate := currencies.Rates[req.TargetCurrency]      //To   USD 1	//INR 80
+	convertedAmount := (req.Amount / baseRate) * targetRate //	   10*1/80   //1*80/1
+	serviceFee := serviceFeeInINR * baseRate
 
 	// Create and return response
 	res := &ConvertResponse{
